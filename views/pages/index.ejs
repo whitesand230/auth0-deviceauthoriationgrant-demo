@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/head'); %>
+</head>
+
+<!--<header>
+  <%- include('../partials/header'); %>
+</header>-->
+
+<body class="text-center">
+
+  <main class="form-signin">
+    <form action="/" method="post">
+      <img class="mb-4" src="/img/794067.jpg" alt="" width="72" height="57">
+      <h1 class="h3 mb-3 fw-normal">Device Grant Flow Example</h1>
+
+      <input type="hidden" value=<%=Code %> >
+
+      <div class="form-floating">
+        <h2>Welcome to StreamBox</h2>
+        <p><%- welcomeLine %></p>
+      </div>
+  
+      <div class="form-floating">
+        <h2>QR Code</h2>
+        <img src=<%= qrCode %> />
+      </div>
+
+      <div class="form-floating">
+        <input class="btn btn-primary" type="submit" onclick="setResetFlag()" name="refreshCode" value="Refresh Code" />
+      </div>
+
+      <div class="form-floating">
+        <h2 class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Show Response Data</h2>
+          <div class="collapse" id="collapseExample">
+            <code id="jsonResData"><%- jsonResData %></code>
+          </div>   
+      </div>
+
+      <%- include('../partials/footer'); %>
+      <br/>
+      <div id="myBar"></div>
+    </form>
+  </main>
+
+</body>
+
+<script>
+  var i = 0;
+  function move() {
+    if (i == 0) {
+      i = 1;
+      var elem = document.getElementById("myBar");
+      var width = 1;
+      var id = setInterval(frame, 90);
+      function frame() {
+        if (width >= 100) {
+          clearInterval(id);
+          i = 0;
+        } else {
+          width++;
+          elem.style.width = width + "%";
+        }
+      }
+    }
+  }
+  setInterval(function(){
+    console.log("Refreshing");
+    //localStorage.setItem("resData", document.getElementById("jsonResData").innerText);
+
+    if(window.localStorage.getItem('codeReset')){
+      window.localStorage.clear('codeReset');
+      location.replace(window.location);
+    }
+    else{
+      location.reload(true);
+    }
+    //location.replace(window.location);
+  }, 10000);
+
+  function setResetFlag(){
+    window.localStorage.setItem('codeReset', true);
+  }
+
+  window.onload(move());
+</script>
+</html>
